@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.7'
 
 services:
   app:
@@ -7,7 +7,12 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./:/usr/src/app
+      - ./sentence_transformers_cache:/root/.cache/torch/sentence_transformers
     command: streamlit run app.py
+    deploy:
+      resources:
+        limits:
+          memory: 500M
     environment:
       VIRTUAL_HOST: inndex.janczechowski.com
       VIRTUAL_PORT: 8501

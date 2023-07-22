@@ -63,7 +63,7 @@ def list_results(df):
         st.markdown(f"### {row['chapter']}")
         st.markdown(f"**Similarity**: {row['similarity']:.2f}")
         st.markdown(f"{row['fragment']}")
-        st.markdown(f"[Read More]({row['url']})")
+        st.markdown(f"[Read the chapter on wanderinginn.com]({row['url']})")
         st.markdown("---")
 
 

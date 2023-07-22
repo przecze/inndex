@@ -1,0 +1,19 @@
+[client]
+showErrorDetails = false
+toolbarMode = "minimal"
+fileWatcherType = "none"
+
+[theme]
+
+base = "light"  
+
+primaryColor = "#8B4513"  # Saddle Brown, to evoke the feeling of wood, reminiscent of an inn.
+
+backgroundColor = "#FAEBD7"  # Antique White, to give the main content area an old parchment paper-like feel.
+
+secondaryBackgroundColor = "#FFE4B5"  # Moccasin, a lighter variant for the sidebar and widgets for contrast.
+
+textColor = "#3B3B3B"  # Dark Gray, to ensure the text stands out against the lighter background.
+
+font = "serif"  # Serif fonts can help to give a more traditional, fantasy, book-like feel to the text.
+
