@@ -5,8 +5,16 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "127.0.0.1:8501:8501"
     volumes:
       - ./:/usr/src/app
     command: streamlit run app.py
+    environment:
+      VIRTUAL_HOST: inndex.janczechowski.com
+      VIRTUAL_PORT: 8501
+      LETSENCRYPT_HOST: inndex.janczechowski.com
+    networks:
+      - nginx-proxy
+
+networks:
+  nginx-proxy:
+    external: true
