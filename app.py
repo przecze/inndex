@@ -2,6 +2,36 @@ import streamlit as st
 from sentence_transformers import SentenceTransformer
 import numpy as np
 import pandas as pd
+from pathlib import Path
+
+import openai
+API_KEY = Path('./openai_api_key').read_text().strip('\n')
+
+def get_fragment_prototype(user_input):
+    # Read from text files
+    system_prompt = Path('prompt/system.txt').read_text()
+    example_1_input = Path('prompt/example_1_input.txt').read_text()
+    example_1_output = Path('prompt/example_1_output.txt').read_text()
+    example_2_input = Path('prompt/example_2_input.txt').read_text()
+    example_2_output = Path('prompt/example_2_output.txt').read_text()
+
+    conversation = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": example_1_input},
+        {"role": "assistant", "content": example_1_output},
+        {"role": "user", "content": example_2_input},
+        {"role": "assistant", "content": example_2_output},
+        {"role": "user", "content": user_input},
+    ]
+
+    # Make the API call
+    client = openai.OpenAI(api_key=API_KEY)
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=conversation
+    )
+    return response.choices[0].message.content
+    
 
 st.set_page_config(
         page_title='The Inndex',
@@ -67,10 +97,14 @@ def list_results(df):
         st.markdown("---")
 
 
-st.title('The Inndex')
-st.write('Minimal vector-based search engine for The Wandering Inn book series. For now only Volume 1 available')
-query = st.text_input("Describe a scene you're looking for")
+if __name__ == '__main__':
+    st.title('The Inndex')
+    st.write('Minimal vector-based search engine for The Wandering Inn book series. For now only Volume 1 available')
+    query = st.text_input("Describe a scene you're looking for")
 
-if query:
-    df = get_similarities(query)
-    list_results(df)
+    if query:
+        fragment = get_fragment_prototype(query)
+        with st.expander("Hallucinated fragment from ChatGPT-3 - used for similarity ranking", expanded=False):
+            st.write(fragment)
+        df = get_similarities(fragment)
+        list_results(df)
