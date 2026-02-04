@@ -1,0 +1,4 @@
+openai_api_key
+data/*
+sentence_transformers_cache/*
+__pycache__/*

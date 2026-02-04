@@ -3,6 +3,7 @@ from sentence_transformers import SentenceTransformer
 import numpy as np
 import pandas as pd
 from pathlib import Path
+import time
 
 import openai
 API_KEY = Path('./openai_api_key').read_text().strip('\n')
@@ -26,11 +27,14 @@ def get_fragment_prototype(user_input):
 
     # Make the API call
     client = openai.OpenAI(api_key=API_KEY)
+    start = time.time()
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-5.2",
+        reasoning_effort="none",
         messages=conversation
     )
-    return response.choices[0].message.content
+    elapsed = time.time() - start
+    return response.choices[0].message.content, elapsed
     
 
 st.set_page_config(
@@ -103,8 +107,10 @@ if __name__ == '__main__':
     query = st.text_input("Describe a scene you're looking for")
 
     if query:
-        fragment = get_fragment_prototype(query)
-        with st.expander("Hallucinated fragment from ChatGPT-3 - used for similarity ranking", expanded=False):
+        with st.spinner('Using GPT-5.2 to hallucinate a fragment for embedding similarity search...'):
+            fragment, gen_time = get_fragment_prototype(query)
+        with st.expander("Hallucinated fragment from GPT-5.2 - used for similarity ranking", expanded=False):
             st.write(fragment)
+            st.caption(f"Generated in {gen_time:.2f}s")
         df = get_similarities(fragment)
         list_results(df)

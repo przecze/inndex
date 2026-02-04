@@ -1,5 +1,5 @@
 # Use official Python image
-FROM python:3.11-slim
+FROM python:3.13-slim
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -8,5 +8,4 @@ WORKDIR /usr/src/app
 COPY requirements.txt ./
 
 # Install app dependencies
-RUN pip install "uv~=0.2.2" && uv pip install --system --no-cache-dir --index-url https://download.pytorch.org/whl/cpu torch
-RUN uv pip install --system --no-cache-dir -r requirements.txt
+RUN pip install "uv~=0.9.30" && uv pip install --system --no-cache-dir -r requirements.txt

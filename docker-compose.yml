@@ -9,6 +9,8 @@ services:
       - ./:/usr/src/app
       - ./sentence_transformers_cache:/root/.cache/torch/sentence_transformers
     command: streamlit run app.py
+    ports:
+      - "127.0.0.1:7888:8501"
     deploy:
       resources:
         limits:

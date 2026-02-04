@@ -1,0 +1,5 @@
+numpy
+sentence_transformers
+loguru
+streamlit
+openai
