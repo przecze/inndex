@@ -4,8 +4,9 @@ This is a service for searching similar passages from the web serial "The Wander
 Application optimized for minimal memory use.
 
 ## Tech Stack
-- Python 3.11
+- Python 3.13
 - Streamlit
 - Sentence Transformers
+- OpenAI Python SDK
 - NumPy
 - Docker
