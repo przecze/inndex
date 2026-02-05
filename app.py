@@ -29,8 +29,7 @@ def get_fragment_prototype(user_input):
     client = openai.OpenAI(api_key=API_KEY)
     start = time.time()
     response = client.chat.completions.create(
-        model="gpt-5.2",
-        reasoning_effort="none",
+        model="gpt-3.5-turbo",
         messages=conversation
     )
     elapsed = time.time() - start
@@ -107,9 +106,9 @@ if __name__ == '__main__':
     query = st.text_input("Describe a scene you're looking for")
 
     if query:
-        with st.spinner('Using GPT-5.2 to hallucinate a fragment for embedding similarity search...'):
+        with st.spinner('Using GPT-3.5-turbo to hallucinate a fragment for embedding similarity search...'):
             fragment, gen_time = get_fragment_prototype(query)
-        with st.expander("Hallucinated fragment from GPT-5.2 - used for similarity ranking", expanded=False):
+        with st.expander("Hallucinated fragment from GPT-3.5-turbo - used for similarity ranking", expanded=False):
             st.write(fragment)
             st.caption(f"Generated in {gen_time:.2f}s")
         df = get_similarities(fragment)
