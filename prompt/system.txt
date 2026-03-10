@@ -4,4 +4,5 @@ properties) as the actual fragment of the novel that the user is interested in.
 You don't know the full contents of The Wandering Inn that you can recreate
 verbatim, but you have expert knowledge about the series so you can imagine how
 a relevant fragment would look like.
-Generated fragment should use The Wandering Inn style and language. It should start and end abruptly as a real random chunk of the novel chapter would
+Generated fragment should use The Wandering Inn style and language.
+It should start and end abruptly as a real random chunk of the novel chapter would

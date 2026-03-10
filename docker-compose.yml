@@ -1,26 +1,48 @@
-version: '3.7'
+secrets:
+  fly_token:
+    file: ./flyio_token_gateway.txt
 
 services:
-  app:
-    build: 
-      context: .
-      dockerfile: Dockerfile
+  suspender:
+    image: alpine:3.19
+    command: ["sh", "/suspender.sh"]
     volumes:
-      - ./:/usr/src/app
-      - ./sentence_transformers_cache:/root/.cache/torch/sentence_transformers
-    command: streamlit run app.py
+      - ./suspender.sh:/suspender.sh:ro
+      - ./notify.sh:/notify.sh:ro
+      - ./activity:/activity
+    secrets:
+      - fly_token
+    environment:
+      - FLY_APP_NAME=inndex-jan-czechowski-com
+      - MOST_RECENT_CALL_CHECK_FREQUENCY_S=10
+      - MOST_RECENT_CALL_MAX_AGE_S=300
+      - MACHINES_STATE_MAX_AGE_S=900
+      - MACHINE_STARTED_MAX_NOTIFY_S=1800
+      - NTFY_TOPIC=${NTFY_TOPIC}
+      - NTFY_EMAIL=${NTFY_EMAIL}
+    restart: unless-stopped
+
+  gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile.gateway
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
     ports:
-      - "127.0.0.1:7888:8501"
-    deploy:
-      resources:
-        limits:
-          memory: 500M
+      - "127.0.0.1:7888:80"
+    volumes:
+      - ./gateway.conf:/etc/wireguard/gateway.conf:ro
+      - ./activity/:/activity
     environment:
       VIRTUAL_HOST: inndex.janczechowski.com
-      VIRTUAL_PORT: 8501
+      VIRTUAL_PORT: "80"
       LETSENCRYPT_HOST: inndex.janczechowski.com
     networks:
       - nginx-proxy
+    restart: unless-stopped
 
 networks:
   nginx-proxy:

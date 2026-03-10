@@ -1,0 +1,11 @@
+FROM nginx:alpine
+
+RUN apk add --no-cache wireguard-tools wireguard-go
+
+COPY nginx-gateway.conf /etc/nginx/templates/default.conf
+COPY entrypoint.gateway.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+EXPOSE 80
+
+ENTRYPOINT ["/entrypoint.sh"]

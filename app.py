@@ -5,8 +5,9 @@ import pandas as pd
 from pathlib import Path
 import time
 
+import os
 import openai
-API_KEY = Path('./openai_api_key').read_text().strip('\n')
+API_KEY = os.environ.get('OPENAI_API_KEY') or Path('./openai_api_key').read_text().strip('\n')
 
 def get_fragment_prototype(user_input):
     # Read from text files
